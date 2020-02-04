@@ -1,0 +1,20 @@
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-static-page:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: build image
+        run: |
+          docker build -t documentation:latest .
+          docker run -v ${PWD}:/output documentation:latest cp -r /usr/share/nginx/html /output/_site
+      - name: deploy in branch gh-pages
+        uses: crazy-max/ghaction-github-pages@v1
+        with:
+          target_branch: gh-pages
+          build_dir: ./_site
