@@ -1,0 +1,20 @@
+name: remove published site from netlify
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  remove-site-from-netlify:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: deploy to netlify
+        uses: ./.github/actions/netlify-clean
+        with:
+          NETLIFY_ACCOUNT_SLUG: ${{ secrets.NETLIFY_ACCOUNT_SLUG }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_DIRECTORY: _site
+          NETLIFY_SITE_NAME: "${{ github.sha }}-${{ github.run_id }}"
