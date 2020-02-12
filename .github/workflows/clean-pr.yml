@@ -13,8 +13,13 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+      - name: show me the variables...
+        run: |
+          echo ${{ github.ref }}
+          echo ${{ github.head_ref }}
+          echo ${{ github.base_ref }}
       - name: deploy to netlify
         uses: ./.github/actions/netlify-clean
         with:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_NAME: ${{ github.ref }}
+          NETLIFY_SITE_NAME: ${{ github.head_ref }}
